@@ -3,122 +3,1474 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tabla de Conversión de Pesos a Bolívares - Recarga Directv</title>
+    <title>Sistema de Recargas</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background-color: rgba(0, 0, 0, 0.4); /* Fondo oscuro */
+            min-height: 100vh;
+            padding: 15px;
         }
-        .modal-content {
-            background-color: #fff;
-            padding: 20px;
-            border: 5px solid #007BFF; /* Marco color azul */
-            border-radius: 15px; /* Bordes redondeados */
-            width: 90%;
-            max-width: 400px;
+        
+        /* Estilos para la ventana emergente de información */
+        .info-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 15px;
+        }
+        
+        .info-content {
+            background: linear-gradient(135deg, #dc012a, #a0001e);
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
             text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            color: white;
+            position: relative;
+            overflow: hidden;
         }
-        .modal-content h2 {
+        
+        .info-close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .info-close-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .info-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .info-title {
+            font-size: 28px;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        
+        .info-subtitle {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .info-text {
+            font-size: 16px;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .info-highlight {
+            font-weight: 700;
+            font-size: 18px;
+            text-decoration: underline;
+            margin: 10px 0;
+        }
+        
+        .info-btn {
+            background-color: white;
+            color: #dc012a;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .info-btn:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .close-btn-top {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+        
+        .close-btn-top:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ed7318, #d45c0a);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 15px;
+        }
+        
+        .content {
+            padding: 20px;
+        }
+        
+        .section {
+            margin-bottom: 25px;
+        }
+        
+        .section h2 {
+            font-size: 17px;
+            color: #333;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 8px;
+        }
+        
+        .operator-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .operator-btn {
+            flex: 1;
+            min-width: 100px;
+            padding: 14px 10px;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+        
+        .operator-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .operator-btn.movistar {
+            background-color: rgba(0, 170, 224, 0.1);
+            border-color: #00aae0;
+            color: #00aae0;
+        }
+        
+        .operator-btn.movilnet {
+            background-color: rgba(255, 88, 95, 0.1);
+            border-color: #ff585f;
+            color: #ff585f;
+        }
+        
+        .operator-btn.digitel {
+            background-color: rgba(220, 1, 42, 0.1);
+            border-color: #dc012a;
+            color: #dc012a;
+        }
+        
+        .operator-btn.selected {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .operator-btn.movistar.selected {
+            background-color: #00aae0;
+            border-color: #00aae0;
+        }
+        
+        .operator-btn.movilnet.selected {
+            background-color: #ff585f;
+            border-color: #ff585f;
+        }
+        
+        .operator-btn.digitel.selected {
+            background-color: #dc012a;
+            border-color: #dc012a;
+        }
+        
+        .amount-select-container {
             margin-bottom: 20px;
         }
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .form-group input {
+        
+        .amount-select {
             width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
+            padding: 14px 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            background-color: white;
+            transition: border-color 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
         }
-        .error {
-            color: red;
-            margin-top: 10px;
+        
+        .amount-select:focus {
+            outline: none;
+            border-color: #ed7318;
+            box-shadow: 0 0 0 2px rgba(237, 115, 24, 0.1);
+        }
+        
+        .amount-select:disabled {
+            background-color: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+            font-size: 15px;
+        }
+        
+        .input-group input, .input-group select {
+            padding: 14px 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+            width: 100%;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: #ed7318;
+            box-shadow: 0 0 0 2px rgba(237, 115, 24, 0.1);
+        }
+        
+        .input-group .error {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 5px;
             display: none;
         }
-        @media (max-width: 600px) {
-            .modal-content {
-                width: 95%;
-                padding: 10px;
+        
+        .input-group .error.show {
+            display: block;
+        }
+        
+        .phone-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .phone-prefix {
+            width: 100%;
+        }
+        
+        .phone-number {
+            width: 100%;
+        }
+        
+        .summary {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-row.total {
+            font-weight: bold;
+            font-size: 18px;
+            border-top: 2px solid #ddd;
+            border-bottom: none;
+            padding-top: 12px;
+            margin-top: 8px;
+        }
+        
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        @media (min-width: 380px) {
+            .actions {
+                flex-direction: row;
+            }
+        }
+        
+        .btn {
+            padding: 16px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        @media (min-width: 380px) {
+            .btn {
+                width: auto;
+                flex: 1;
+            }
+        }
+        
+        .btn-primary {
+            background-color: #ed7318;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #d45c0a;
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .btn-copy {
+            background-color: #4CAF50;
+            color: white;
+            margin-top: 10px;
+        }
+        
+        .btn-copy:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .btn-copy:active {
+            transform: translateY(0);
+        }
+        
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-whatsapp:hover {
+            background-color: #20b858;
+            transform: translateY(-2px);
+        }
+        
+        .btn-whatsapp:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-whatsapp:active {
+            transform: translateY(0);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 15px;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .operator-name {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            color: white;
+        }
+        
+        .operator-name.movistar {
+            background-color: #00aae0;
+        }
+        
+        .operator-name.movilnet {
+            background-color: #ff585f;
+        }
+        
+        .operator-name.digitel {
+            background-color: #dc012a;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        
+        .modal h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        
+        .transaction-details {
+            background-color: #f9f9f9;
+            padding: 18px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .transaction-details p {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 15px;
+        }
+        
+        .transaction-details .label {
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .transaction-details .value {
+            font-weight: bold;
+        }
+        
+        .close-btn {
+            background-color: #ed7318;
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .close-btn:hover {
+            background-color: #d45c0a;
+            transform: translateY(-2px);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #ed7318;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .operator-info {
+            text-align: center;
+            margin-bottom: 15px;
+            font-weight: 500;
+            color: #666;
+            font-size: 15px;
+        }
+        
+        .cedula-info {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        .phone-info {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        .negocio-info {
+            font-size: 12px;
+            color: #777;
+            margin-top: 5px;
+        }
+        
+        .sms-notification {
+            background-color: #e8f4fd;
+            border-left: 4px solid #ed7318;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            text-align: left;
+        }
+        
+        .copy-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            z-index: 3000;
+            display: none;
+            font-weight: 500;
+            text-align: center;
+            max-width: 300px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+        
+        .whatsapp-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #25D366;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            z-index: 3000;
+            display: none;
+            font-weight: 500;
+            text-align: center;
+            max-width: 300px;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+        
+        /* Mejoras de responsive para pantallas muy pequeñas */
+        @media (max-width: 350px) {
+            .content {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 20px 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .operator-buttons {
+                flex-direction: column;
+            }
+            
+            .info-title {
+                font-size: 24px;
+            }
+            
+            .info-subtitle {
+                font-size: 18px;
+            }
+            
+            .copy-notification {
+                max-width: 250px;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            .whatsapp-notification {
+                max-width: 250px;
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+        
+        /* Ajustes para pantallas más grandes */
+        @media (min-width: 768px) {
+            .container {
+                max-width: 500px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .header p {
+                font-size: 16px;
+            }
+            
+            .section h2 {
+                font-size: 18px;
+            }
+            
+            .operator-btn {
+                font-size: 15px;
+                padding: 16px 10px;
+            }
+        }
+        
+        /* Ajustes para pantallas muy grandes */
+        @media (min-width: 1200px) {
+            body {
+                padding: 30px;
+            }
+            
+            .container {
+                max-width: 500px;
             }
         }
     </style>
 </head>
 <body>
-    <div class="modal-content">
-        <h2>Tabla de Conversión de Pesos a Bolívares - Recarga Directv</h2>
-        <div class="form-group">
-            <label for="monto">Ingrese aquí el Monto a Recargar en Pesos para ver el Monto a Pagar en BS:</label>
-            <input type="number" id="monto" name="monto" oninput="convertToBs()" required>
-            <span id="minRecargaMsg" class="error">Recarga Mínima 10 MIL Pesos</span>
+    <!-- Ventana emergente de información -->
+    <div class="info-modal" id="info-modal">
+        <div class="info-content">
+            <button class="info-close-btn" id="info-close-btn">×</button>
+            <div class="info-icon">⚠️</div>
+            <h1 class="info-title">INFORMACIÓN IMPORTANTE</h1>
+            <h2 class="info-subtitle">Digitel aumenta su recarga mínima</h2>
+            <div class="info-text">
+                <p>Se informa a todos nuestros usuarios que:</p>
+                <p class="info-highlight">Digitel ha aumentado su recarga mínima a 160 Bs</p>
+                <p>Los montos disponibles para Digitel ahora son:</p>
+                <p><strong>160, 320, 480, 640, 800, 960, 1120, 1280, 1440, 1600, 1760 Bs</strong></p>
+                <p>¡Tome sus previsiones al realizar recargas para esta operadora!</p>
+            </div>
+            <button class="info-btn" id="info-accept-btn">Entendido</button>
         </div>
-        <div class="form-group">
-            <label for="costo">Costo en BS:</label>
-            <input type="text" id="costo" name="costo" readonly>
+    </div>
+    
+    <div class="container">
+        <button class="close-btn-top" id="close-window">×</button>
+        <div class="header">
+            <h1>Sistema de Recargas</h1>
+            <p>Selecciona tu operadora y recarga</p>
         </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>Selecciona Operadora</h2>
+                <div class="operator-buttons">
+                    <div class="operator-btn movistar" data-operator="Movistar">Movistar</div>
+                    <div class="operator-btn movilnet" data-operator="Movilnet">Movilnet</div>
+                    <div class="operator-btn digitel" data-operator="Digitel">Digitel</div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Monto de Recarga</h2>
+                <div class="operator-info" id="operator-info">
+                    Primero selecciona una operadora
+                </div>
+                <div class="amount-select-container">
+                    <select id="amount-select" class="amount-select" required disabled>
+                        <option value="">Seleccione el monto deseado</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2>Datos de Recarga</h2>
+                <div class="input-group">
+                    <label for="negocio">Nombre de tu negocio (opcional)</label>
+                    <input type="text" id="negocio" placeholder="Ej: Mi Tienda Express" maxlength="50">
+                    <div class="negocio-info">Ingresa el nombre de tu negocio para personalizar el mensaje que enviarás a tu cliente</div>
+                </div>
+                
+                <!-- Botón para compartir en WhatsApp -->
+                <div class="input-group">
+                    <button class="btn btn-whatsapp" id="whatsapp-btn" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893 0-3.189-1.248-6.189-3.515-8.444"/>
+                        </svg>
+                        Compartir en WhatsApp
+                    </button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="cedula">Cédula de identidad *</label>
+                    <input type="text" id="cedula" placeholder="Ej: V12345678" maxlength="9" required>
+                    <div class="cedula-info">Formato: V, E o J seguido de 5-8 dígitos (máx. 9 caracteres)</div>
+                    <div class="error" id="cedula-error">La cédula debe tener entre 5 y 8 dígitos, opcionalmente precedida por V, E o J.</div>
+                </div>
+                <div class="input-group">
+                    <label for="phone-prefix">Número de teléfono *</label>
+                    <div class="phone-container">
+                        <select id="phone-prefix" class="phone-prefix" required disabled>
+                            <option value="">Selecciona el código</option>
+                        </select>
+                        <input type="tel" id="phone-number" class="phone-number" placeholder="Número de teléfono (7 dígitos)" maxlength="7" required disabled>
+                    </div>
+                    <div class="phone-info">Primero selecciona una operadora para habilitar el número</div>
+                    <div class="error" id="phone-error">El número de teléfono debe tener 7 dígitos.</div>
+                </div>
+            </div>
+            
+            <div class="summary">
+                <div class="summary-row">
+                    <span>Operadora:</span>
+                    <span id="summary-operator">-</span>
+                </div>
+                <div class="summary-row">
+                    <span>Monto de recarga:</span>
+                    <span id="recharge-amount">0.00 Bs</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total a pagar:</span>
+                    <span id="total-amount">0.00 Bs</span>
+                </div>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Procesando recarga...</p>
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-primary" id="pay-btn" disabled>Pagar Recarga</button>
+                <button class="btn btn-secondary" id="cancel-btn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de confirmación -->
+    <div class="modal" id="confirmation-modal">
+        <div class="modal-content">
+            <div class="operator-name" id="modal-operator-name">-</div>
+            <div class="success-icon">✓</div>
+            <h2>RECARGA EXITOSA</h2>
+            
+            <div class="sms-notification" id="sms-notification">
+                Su operadora enviará un mensaje de texto como confirmación de la presente recarga.
+            </div>
+            
+            <div class="transaction-details">
+                <p>
+                    <span class="label">Operadora:</span>
+                    <span class="value" id="modal-operator">-</span>
+                </p>
+                <p>
+                    <span class="label">Número:</span>
+                    <span class="value" id="modal-phone">-</span>
+                </p>
+                <p>
+                    <span class="label">N° Operación:</span>
+                    <span class="value" id="operation-number">12345678</span>
+                </p>
+                <p>
+                    <span class="label">Fecha:</span>
+                    <span class="value" id="transaction-date">01/01/2023</span>
+                </p>
+                <p>
+                    <span class="label">Hora:</span>
+                    <span class="value" id="transaction-time">12:00:00</span>
+                </p>
+                <p>
+                    <span class="label">Monto:</span>
+                    <span class="value" id="transaction-amount">0.00 Bs</span>
+                </p>
+            </div>
+            
+            <button class="btn btn-copy" id="copy-btn">Copiar Comprobante</button>
+            <button class="btn btn-whatsapp" id="whatsapp-modal-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893 0-3.189-1.248-6.189-3.515-8.444"/>
+                </svg>
+                Compartir en WhatsApp
+            </button>
+            <button class="close-btn" id="close-modal">Aceptar</button>
+        </div>
+    </div>
+    
+    <!-- Notificación de copiado -->
+    <div class="copy-notification" id="copy-notification">
+        <div>✅ Comprobante copiado con éxito</div>
+        <div style="font-size: 13px; margin-top: 5px; opacity: 0.9;">Ahora puede pegar y enviar a su cliente</div>
+    </div>
+    
+    <!-- Notificación de WhatsApp -->
+    <div class="whatsapp-notification" id="whatsapp-notification">
+        <div>✅ Abriendo WhatsApp</div>
+        <div style="font-size: 13px; margin-top: 5px; opacity: 0.9;">El mensaje se ha preparado para enviar</div>
     </div>
 
     <script>
-        const conversionTable = {
-            1000: 20.00,
-            2000: 40.00,
-            3000: 60.00,
-            4000: 80.00,
-            5000: 100.00,
-            6000: 120.00,
-            7000: 140.00,
-            8000: 160.00,
-            9000: 180.00,
-            10000: 207.00,
-            20000: 398.00,
-            30000: 590.00,
-            40000: 782.00,
-            50000: 973.00,
-            60000: 1165.00,
-            70000: 1360.00,
-            80000: 1550.00,
-            90000: 1750.00,
-            100000: 1950.00
+        // =============================================
+        // CONFIGURACIÓN - URL DE GOOGLE APPS SCRIPT
+        // =============================================
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxyj5DeZCgkHeI9dbpe518qTLoRhErPDDKamZjZvC8S8z0xZ9BegFk_JpSVrL0jJ4sUOw/exec';
+        
+        // =============================================
+        // MONTOS PRE-DEFINIDOS
+        // =============================================
+        const montosPorOperadora = {
+            'Movistar': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200],
+            'Movilnet': [150, 300, 450, 600, 750, 900, 1050, 1200, 1350, 1500, 1650, 1800],
+            'Digitel': [160, 320, 480, 640, 800, 960, 1120, 1280, 1440, 1600, 1760]
         };
-        const minRecarga = 10000; // Mínima recarga en pesos
 
-        // Función para convertir pesos a bolívares
-        function convertToBs() {
-            const monto = parseInt(document.getElementById('monto').value, 10);
-            const minRecargaMsg = document.getElementById('minRecargaMsg');
-            let costo = 0;
+        // =============================================
+        // PREFIJOS POR OPERADORA
+        // =============================================
+        const prefijosPorOperadora = {
+            'Movistar': ['0414', '0424'],
+            'Movilnet': ['0416', '0426'],
+            'Digitel': ['0412', '0422']
+        };
 
-            if (monto < minRecarga) {
-                minRecargaMsg.style.display = 'block';
-                document.getElementById('costo').value = '';
-                return;
-            } else {
-                minRecargaMsg.style.display = 'none';
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos del DOM
+            const infoModal = document.getElementById('info-modal');
+            const infoCloseBtn = document.getElementById('info-close-btn');
+            const infoAcceptBtn = document.getElementById('info-accept-btn');
+            const operatorButtons = document.querySelectorAll('.operator-btn');
+            const amountSelect = document.getElementById('amount-select');
+            const operatorInfo = document.getElementById('operator-info');
+            const negocioInput = document.getElementById('negocio');
+            const cedulaInput = document.getElementById('cedula');
+            const cedulaError = document.getElementById('cedula-error');
+            const phonePrefixSelect = document.getElementById('phone-prefix');
+            const phoneNumberInput = document.getElementById('phone-number');
+            const phoneError = document.getElementById('phone-error');
+            const summaryOperator = document.getElementById('summary-operator');
+            const rechargeAmount = document.getElementById('recharge-amount');
+            const totalAmount = document.getElementById('total-amount');
+            const payButton = document.getElementById('pay-btn');
+            const cancelButton = document.getElementById('cancel-btn');
+            const modal = document.getElementById('confirmation-modal');
+            const closeModalButton = document.getElementById('close-modal');
+            const modalOperatorName = document.getElementById('modal-operator-name');
+            const modalOperator = document.getElementById('modal-operator');
+            const modalPhone = document.getElementById('modal-phone');
+            const operationNumber = document.getElementById('operation-number');
+            const transactionDate = document.getElementById('transaction-date');
+            const transactionTime = document.getElementById('transaction-time');
+            const transactionAmount = document.getElementById('transaction-amount');
+            const loading = document.getElementById('loading');
+            const closeWindowBtn = document.getElementById('close-window');
+            const smsNotification = document.getElementById('sms-notification');
+            const copyButton = document.getElementById('copy-btn');
+            const copyNotification = document.getElementById('copy-notification');
+            const whatsappBtn = document.getElementById('whatsapp-btn');
+            const whatsappModalBtn = document.getElementById('whatsapp-modal-btn');
+            const whatsappNotification = document.getElementById('whatsapp-notification');
+            
+            // Variables de estado
+            let selectedOperator = '';
+            let selectedAmount = 0;
+            let isCedulaValid = false;
+            let isPhoneValid = false;
+            let lastRechargedNumber = '';
+
+            // Mostrar la ventana emergente de información al cargar la página
+            setTimeout(function() {
+                infoModal.style.display = 'flex';
+            }, 500); // Mostrar después de 0.5 segundos
+
+            // Cargar datos del almacenamiento local al iniciar
+            const savedNegocio = localStorage.getItem('negocioRecargas');
+            if (savedNegocio) {
+                negocioInput.value = savedNegocio;
             }
-
-            // Descomponer el monto en múltiplos de 10,000 y 1,000
-            const multiplesDeDiezMil = Math.floor(monto / 10000) * 10000;
-            const multiplesDeMil = monto % 10000;
-
-            if (multiplesDeDiezMil in conversionTable) {
-                costo += conversionTable[multiplesDeDiezMil];
+            
+            const savedCedula = localStorage.getItem('cedulaRecargas');
+            if (savedCedula) {
+                cedulaInput.value = savedCedula;
+                validateCedula();
             }
-            if (multiplesDeMil in conversionTable) {
-                costo += conversionTable[multiplesDeMil];
+            
+            // Función para redirigir o cerrar la ventana
+            function redirectOrClose() {
+                // Intentar cerrar la ventana si fue abierta con window.open
+                if (window.opener) {
+                    window.close();
+                } else {
+                    // Redireccionar a la URL especificada
+                    window.location.href = 'https://www.vendeygana.net/user/';
+                }
             }
+            
+            // Función para validar cédula
+            function validateCedula() {
+                const cedula = cedulaInput.value.trim();
+                const cedulaRegex = /^([VEJ])?(\d{5,8})$/i;
+                
+                if (cedulaRegex.test(cedula) && cedula.length <= 9) {
+                    cedulaError.classList.remove('show');
+                    isCedulaValid = true;
+                    localStorage.setItem('cedulaRecargas', cedula.toUpperCase());
+                    updatePayButtonState();
+                    return true;
+                } else {
+                    cedulaError.classList.add('show');
+                    isCedulaValid = false;
+                    updatePayButtonState();
+                    return false;
+                }
+            }
+            
+            // Función para validar número de teléfono
+            function validatePhone() {
+                const prefix = phonePrefixSelect.value;
+                const number = phoneNumberInput.value.trim();
+                const phoneRegex = /^\d{7}$/;
+                
+                if (prefix && phoneRegex.test(number)) {
+                    phoneError.classList.remove('show');
+                    isPhoneValid = true;
+                    updatePayButtonState();
+                    return true;
+                } else {
+                    phoneError.classList.add('show');
+                    isPhoneValid = false;
+                    updatePayButtonState();
+                    return false;
+                }
+            }
+            
+            // Función para actualizar estado del botón de pago
+            function updatePayButtonState() {
+                if (selectedOperator && selectedAmount > 0 && isCedulaValid && isPhoneValid) {
+                    payButton.disabled = false;
+                } else {
+                    payButton.disabled = true;
+                }
+            }
+            
+            // Función para cargar prefijos según operadora
+            function loadPrefijos(operator) {
+                const prefijos = prefijosPorOperadora[operator] || [];
+                phonePrefixSelect.innerHTML = '<option value="">Selecciona el código</option>';
+                
+                prefijos.forEach(prefijo => {
+                    const option = document.createElement('option');
+                    option.value = prefijo;
+                    option.textContent = prefijo;
+                    phonePrefixSelect.appendChild(option);
+                });
+                
+                // Habilitar los campos de teléfono
+                phonePrefixSelect.disabled = false;
+                phoneNumberInput.disabled = false;
+            }
+            
+            // Función para mostrar los montos en el select
+            function displayMontos(operator) {
+                const montos = montosPorOperadora[operator] || [];
+                amountSelect.innerHTML = '<option value="">Seleccione el monto deseado</option>';
+                
+                montos.forEach(monto => {
+                    const option = document.createElement('option');
+                    option.value = monto;
+                    option.textContent = `${monto}.00 Bs`;
+                    amountSelect.appendChild(option);
+                });
+                
+                // Habilitar el select de montos
+                amountSelect.disabled = false;
+            }
+            
+            // Función para cargar el nombre de la operadora en el modal
+            function loadOperatorName(operator) {
+                modalOperatorName.textContent = operator;
+                modalOperatorName.className = `operator-name ${operator.toLowerCase()}`;
+            }
+            
+            // Función para enviar datos a Google Sheets
+            async function saveToGoogleSheets(data) {
+                try {
+                    const url = GOOGLE_SCRIPT_URL + '?timestamp=' + Date.now();
+                    
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        mode: 'no-cors',
+                        body: JSON.stringify(data)
+                    });
+                    
+                    // Con 'no-cors', no podemos leer la respuesta, pero sabemos que se envió
+                    return {
+                        status: 'success',
+                        message: 'Datos guardados correctamente'
+                    };
+                    
+                } catch (error) {
+                    console.error('Error al enviar datos:', error);
+                    throw error;
+                }
+            }
+            
+            // Función para generar un número de operación aleatorio de 8 dígitos
+            function generateOperationNumber() {
+                return Math.floor(10000000 + Math.random() * 90000000);
+            }
+            
+            // Función para obtener la fecha y hora actual
+            function getCurrentDateTime() {
+                const now = new Date();
+                const date = now.toLocaleDateString('es-ES');
+                const time = now.toLocaleTimeString('es-ES');
+                return { date, time };
+            }
+            
+            // Función para actualizar el resumen (SIN COMISIÓN)
+            function updateSummary() {
+                // El total es igual al monto de recarga (sin comisión)
+                const total = selectedAmount;
+                
+                summaryOperator.textContent = selectedOperator;
+                rechargeAmount.textContent = selectedAmount.toFixed(2) + ' Bs';
+                totalAmount.textContent = total.toFixed(2) + ' Bs';
+            }
+            
+            // Función para copiar los datos del comprobante
+            function copyReceiptToClipboard() {
+                const negocio = negocioInput.value.trim() || 'SALDO EXPRESS';
+                const operator = modalOperator.textContent;
+                const phone = modalPhone.textContent;
+                const operation = operationNumber.textContent;
+                const date = transactionDate.textContent;
+                const time = transactionTime.textContent;
+                const amount = transactionAmount.textContent;
+                
+                // Crear el mensaje completo con formato WhatsApp
+                let receiptText = `*TU RECARGA AL NUMERO* ${phone} _*FUE PROCESADA DE FORMA EXITOSA*_✅
 
-            document.getElementById('costo').value = `${costo.toFixed(2)} BS`; // Mostrar en formato de 2 decimales
-        }
+*COMPROBANTE DE RECARGA*
+
+*Operadora:* ${operator}
+*Número:* ${phone}
+*N° Operación:* ${operation}
+*Fecha:* ${date}
+*Hora:* ${time}
+*Monto:* ${amount}
+
+*Gracias por confiar en nosotros en ${negocio} ADEMAS TE OFRECEMOS:*
+Actualización de Rif, FOTOCOPIAS tramites del *SENIAT* , *FOTOS CARNET* , FOTOMONTAJE, Y los mejores precios en CUENTAS STREAMING COMO:
+*NETFLIX* 📺
+*AMAZON PRIME* 🎬
+*DISNEY PLUS* 🐭
+*MAX PREMIUM* 🎥
+*PANAXTREAMING TV GO* 📡
+*PARAMOUNT* 🎞️
+*CRUNCHYROLL* 🎌
+*APLLE TV* 🍎
+*SPOTFIY PREMIUM* 🎵
+*YOUTUBE PREMIUM* ▶️
+*CAPCUT PRO* ✂️
+*CANVA* 🎨
+_RECARGAS DE FREE FIRE, ROBOX Y CALL OF DUTY Y MAS_ 🎮
+SALDO GAMER CON LOS MEJORES JUEGOS
+
+_*TODO ESTO Y MAS EN ${negocio} CALLE 26 ENTRE 7 Y 8 AL LADO DEL CC RAMIRAL*_ 🏪
+
+¡Recarga exitosa! Su operadora enviará un mensaje de texto como confirmación.`;
+                
+                // Usar la API del portapapeles
+                navigator.clipboard.writeText(receiptText).then(function() {
+                    // Mostrar notificación de éxito
+                    copyNotification.style.display = 'block';
+                    setTimeout(function() {
+                        copyNotification.style.display = 'none';
+                    }, 4000); // Aumenté el tiempo a 4 segundos para mejor lectura
+                }).catch(function(err) {
+                    console.error('Error al copiar: ', err);
+                    // Fallback para navegadores antiguos
+                    const textArea = document.createElement('textarea');
+                    textArea.value = receiptText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    // Mostrar notificación de éxito
+                    copyNotification.style.display = 'block';
+                    setTimeout(function() {
+                        copyNotification.style.display = 'none';
+                    }, 4000);
+                });
+            }
+            
+            // Función para compartir en WhatsApp
+            function shareOnWhatsApp() {
+                const negocio = negocioInput.value.trim() || 'SALDO EXPRESS';
+                const operator = modalOperator.textContent;
+                const phone = modalPhone.textContent;
+                const operation = operationNumber.textContent;
+                const date = transactionDate.textContent;
+                const time = transactionTime.textContent;
+                const amount = transactionAmount.textContent;
+                
+                // Crear el mensaje completo con formato WhatsApp
+                const message = `*TU RECARGA AL NUMERO* ${phone} _*FUE PROCESADA DE FORMA EXITOSA*_✅
+
+*COMPROBANTE DE RECARGA*
+
+*Operadora:* ${operator}
+*Número:* ${phone}
+*N° Operación:* ${operation}
+*Fecha:* ${date}
+*Hora:* ${time}
+*Monto:* ${amount}
+
+*Gracias por confiar en nosotros en ${negocio} ADEMAS TE OFRECEMOS:*
+Actualización de Rif, FOTOCOPIAS tramites del *SENIAT* , *FOTOS CARNET* , FOTOMONTAJE, Y los mejores precios en CUENTAS STREAMING COMO:
+*NETFLIX* 📺
+*AMAZON PRIME* 🎬
+*DISNEY PLUS* 🐭
+*MAX PREMIUM* 🎥
+*PANAXTREAMING TV GO* 📡
+*PARAMOUNT* 🎞️
+*CRUNCHYROLL* 🎌
+*APLLE TV* 🍎
+*SPOTFIY PREMIUM* 🎵
+*YOUTUBE PREMIUM* ▶️
+*CAPCUT PRO* ✂️
+*CANVA* 🎨
+_RECARGAS DE FREE FIRE, ROBOX Y CALL OF DUTY Y MAS_ 🎮
+SALDO GAMER CON LOS MEJORES JUEGOS
+
+_*TODO ESTO Y MAS EN ${negocio} CALLE 26 ENTRE 7 Y 8 AL LADO DEL CC RAMIRAL*_ 🏪
+
+¡Recarga exitosa! Su operadora enviará un mensaje de texto como confirmación.`;
+                
+                // Codificar el mensaje para URL
+                const encodedMessage = encodeURIComponent(message);
+                
+                // Crear el enlace de WhatsApp
+                const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
+                
+                // Abrir WhatsApp en una nueva ventana
+                window.open(whatsappURL, '_blank');
+                
+                // Mostrar notificación
+                whatsappNotification.style.display = 'block';
+                setTimeout(function() {
+                    whatsappNotification.style.display = 'none';
+                }, 3000);
+            }
+            
+            // Event listeners para la ventana emergente de información
+            infoCloseBtn.addEventListener('click', function() {
+                infoModal.style.display = 'none';
+            });
+            
+            infoAcceptBtn.addEventListener('click', function() {
+                infoModal.style.display = 'none';
+            });
+            
+            // Event listeners para los botones de operadora
+            operatorButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    operatorButtons.forEach(btn => btn.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    selectedOperator = this.getAttribute('data-operator');
+                    operatorInfo.textContent = `Montos disponibles para ${selectedOperator}`;
+                    summaryOperator.textContent = selectedOperator;
+                    
+                    selectedAmount = 0;
+                    updateSummary();
+                    updatePayButtonState();
+                    
+                    // Cargar prefijos y montos para esta operadora
+                    loadPrefijos(selectedOperator);
+                    displayMontos(selectedOperator);
+                });
+            });
+            
+            // Event listener para el select de montos
+            amountSelect.addEventListener('change', function() {
+                selectedAmount = parseFloat(this.value) || 0;
+                updateSummary();
+                updatePayButtonState();
+            });
+            
+            // Event listeners para validación en tiempo real
+            negocioInput.addEventListener('input', function() {
+                // Guardar en localStorage pero no es obligatorio
+                localStorage.setItem('negocioRecargas', this.value);
+            });
+            
+            cedulaInput.addEventListener('input', function() {
+                this.value = this.value.toUpperCase();
+                validateCedula();
+            });
+            
+            phonePrefixSelect.addEventListener('change', function() {
+                validatePhone();
+            });
+            
+            phoneNumberInput.addEventListener('input', function() {
+                // Solo permitir números
+                this.value = this.value.replace(/\D/g, '');
+                validatePhone();
+            });
+            
+            // Event listener para el botón de pagar
+            payButton.addEventListener('click', async function() {
+                if (!selectedOperator) {
+                    alert('Por favor, selecciona una operadora.');
+                    return;
+                }
+                
+                if (selectedAmount === 0) {
+                    alert('Por favor, selecciona un monto para recargar.');
+                    return;
+                }
+                
+                if (!validateCedula()) {
+                    alert('Por favor, ingresa una cédula válida.');
+                    return;
+                }
+                
+                if (!validatePhone()) {
+                    alert('Por favor, ingresa un número de teléfono válido.');
+                    return;
+                }
+                
+                loading.style.display = 'block';
+                payButton.disabled = true;
+                
+                try {
+                    const operationNum = generateOperationNumber();
+                    const { date, time } = getCurrentDateTime();
+                    
+                    // Combinar prefijo y número en un solo campo
+                    const numeroCompleto = phonePrefixSelect.value + phoneNumberInput.value;
+                    lastRechargedNumber = numeroCompleto; // Guardar para WhatsApp
+                    
+                    const formData = {
+                        negocio: negocioInput.value || 'No especificado',
+                        cedula: cedulaInput.value.toUpperCase(),
+                        operadora: selectedOperator,
+                        numero: numeroCompleto,
+                        monto: selectedAmount.toFixed(2),
+                        operacion: operationNum.toString(),
+                        fecha: date,
+                        hora: time
+                    };
+                    
+                    const result = await saveToGoogleSheets(formData);
+                    
+                    if (result.status === 'success') {
+                        // Cargar el nombre de la operadora
+                        loadOperatorName(selectedOperator);
+                        
+                        modalOperator.textContent = selectedOperator;
+                        modalPhone.textContent = numeroCompleto;
+                        operationNumber.textContent = operationNum;
+                        transactionDate.textContent = date;
+                        transactionTime.textContent = time;
+                        transactionAmount.textContent = selectedAmount.toFixed(2) + ' Bs';
+                        
+                        // Mostrar notificación de SMS
+                        smsNotification.textContent = `Su operadora ${selectedOperator} enviará un mensaje de texto como confirmación de la presente recarga.`;
+                        
+                        // Habilitar el botón de WhatsApp
+                        whatsappBtn.disabled = false;
+                        
+                        modal.style.display = 'flex';
+                    } else {
+                        throw new Error(result.message);
+                    }
+                    
+                } catch (error) {
+                    console.error('Error en el proceso:', error);
+                    alert('Error de conexión. Los datos no se guardaron.\n\nDetalle: ' + error.message);
+                } finally {
+                    loading.style.display = 'none';
+                    updatePayButtonState();
+                }
+            });
+            
+            // Event listener para el botón de cancelar
+            cancelButton.addEventListener('click', function() {
+                redirectOrClose();
+            });
+            
+            // Event listener para el botón de cerrar en la parte superior
+            closeWindowBtn.addEventListener('click', function() {
+                redirectOrClose();
+            });
+            
+            // Event listener para el botón de copiar
+            copyButton.addEventListener('click', function() {
+                copyReceiptToClipboard();
+            });
+            
+            // Event listener para el botón de WhatsApp en el formulario
+            whatsappBtn.addEventListener('click', function() {
+                if (!lastRechargedNumber) {
+                    alert('Primero debe realizar una recarga exitosa.');
+                    return;
+                }
+                shareOnWhatsApp();
+            });
+            
+            // Event listener para el botón de WhatsApp en el modal
+            whatsappModalBtn.addEventListener('click', function() {
+                shareOnWhatsApp();
+            });
+            
+            // Event listener para cerrar el modal
+            closeModalButton.addEventListener('click', function() {
+                modal.style.display = 'none';
+                operatorButtons.forEach(btn => btn.classList.remove('selected'));
+                amountSelect.innerHTML = '<option value="">Seleccione el monto deseado</option>';
+                amountSelect.disabled = true;
+                phonePrefixSelect.innerHTML = '<option value="">Selecciona el código</option>';
+                phonePrefixSelect.disabled = true;
+                phoneNumberInput.value = '';
+                phoneNumberInput.disabled = true;
+                operatorInfo.textContent = 'Primero selecciona una operadora';
+                selectedOperator = '';
+                selectedAmount = 0;
+                isPhoneValid = false;
+                updateSummary();
+                updatePayButtonState();
+            });
+            
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    operatorButtons.forEach(btn => btn.classList.remove('selected'));
+                    amountSelect.innerHTML = '<option value="">Seleccione el monto deseado</option>';
+                    amountSelect.disabled = true;
+                    phonePrefixSelect.innerHTML = '<option value="">Selecciona el código</option>';
+                    phonePrefixSelect.disabled = true;
+                    phoneNumberInput.value = '';
+                    phoneNumberInput.disabled = true;
+                    operatorInfo.textContent = 'Primero selecciona una operadora';
+                    selectedOperator = '';
+                    selectedAmount = 0;
+                    isPhoneValid = false;
+                    updateSummary();
+                    updatePayButtonState();
+                }
+            });
+        });
     </script>
 </body>
 </html>
